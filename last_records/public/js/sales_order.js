@@ -1,5 +1,11 @@
 frappe.ui.form.on("Sales Order Item",{
     "item_code" : function (frm, cdt, cdn){
+        var help_content =
+			`<table class="table table-bordered" style="background-color: #f9f9f9; color: black; font-weight: bold;">
+				<tr>
+				    <td>${__("Warehouse")}</td>
+				    <td>${__("Stock")}</td>
+				</tr>`;
     	var d = locals[cdt][cdn];
         	if(d.item_code){
             	frappe.call({
@@ -20,6 +26,20 @@ frappe.ui.form.on("Sales Order Item",{
 				                row.rate = r.message[i][5];
                 	    }
                     }
+	            });
+
+	            frappe.call({
+    		        "method": "last_records.last_records.doctype.last_purchase_table.last_purchase_table.getStock",
+    		        args: {
+    			            item_code: d.item_code,
+    		        },
+        		    callback:function(r){
+        		        for (var i=0;i<r.message.length;i++){
+        		        help_content += `<tr><td>` +r.message[i][0]+ `</td><td>`+r.message[i][1]+`</td></tr>`;
+                        }
+                        help_content += `</table>`;
+                            msgprint(help_content);
+            	        }
 	            });
     	    }
 	    }

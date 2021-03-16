@@ -30,3 +30,14 @@ def getSalesLastprice(item_code):
 		return last_SINV
 	else:
 		False
+
+
+@frappe.whitelist(allow_guest=True)
+def getStock(item_code):
+	stock = frappe.db.sql("""select warehouse, actual_qty from `tabBin`
+                where item_code = %s and actual_qty != 0;""",(item_code),as_list = True)
+
+	if stock:
+		return stock
+	else:
+		False

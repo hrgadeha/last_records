@@ -26,7 +26,13 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+
+doctype_js = {
+	"Sales Order" : "public/js/sales_order.js",
+	"Purchase Order" : "public/js/purchase_order.js"
+}
+
+
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -78,6 +84,24 @@ app_license = "MIT"
 # Document Events
 # ---------------
 # Hook on document methods and events
+
+fixtures = [
+	{
+        "doctype": "Custom Field",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+			"Purchase Order-section_break_56",
+			"Purchase Order-last_purchase_details",
+			"Sales Order-last_sales_details",
+			"Sales Order-last_sales_table"
+		]
+	   ]
+	]
+    }
+]
 
 # doc_events = {
 # 	"*": {

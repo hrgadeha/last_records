@@ -10,21 +10,23 @@ class LastPurchaseTable(Document):
 	pass
 
 @frappe.whitelist(allow_guest=True)
-def getLastprice(item_code, supplier):
-	balance_qty = "select pinv.name,pitem.item_code,pitem.qty,pitem.rate from `tabPurchase Invoice Item` pitem,`tabPurchase Invoice` pinv where pitem.parent = pinv.name and pitem.item_code = '"+str(item_code)+"' and pinv.supplier = '"+str(supplier)+"' and pinv.docstatus != 2 order by pinv.creation desc limit 5";
-	li=[]
-	dic=frappe.db.sql(balance_qty, as_dict=True)
-	for i in dic:
-		name,item_code,qty,rate=i['name'],i['item_code'],i['qty'],i['rate']
-		li.append([name,item_code,qty,rate])
-	return li
+def getPurchaseLastprice(item_code):
+	last_PINV = frappe.db.sql("""select pinv.name,pinv.supplier_name,pinv.posting_date,pitem.item_code,pitem.qty,pitem.rate 
+		from `tabPurchase Invoice Item` pitem, `tabPurchase Invoice` pinv where pitem.parent = pinv.name and pitem.item_code = %s 
+		and pinv.docstatus = 1 order by pinv.creation desc limit 5;""",(item_code),as_list = True)
+
+	if last_PINV:
+		return last_PINV
+	else:
+		False
 
 @frappe.whitelist(allow_guest=True)
-def getLastSalesprice(item_code, customer):
-	balance_qty = "select sinv.name,sitem.item_code,sitem.qty,sitem.rate from `tabSales Invoice Item` sitem,`tabSales Invoice` sinv where sitem.parent = sinv.name and sitem.item_code = '"+str(item_code)+"' and sinv.customer = '"+str(customer)+"' and sinv.docstatus != 2 order by sinv.creation desc limit 5";
-	li=[]
-	dic=frappe.db.sql(balance_qty, as_dict=True)
-	for i in dic:
-		name,item_code,qty,rate=i['name'],i['item_code'],i['qty'],i['rate']
-		li.append([name,item_code,qty,rate])
-	return li
+def getSalesLastprice(item_code):
+	last_SINV = frappe.db.sql("""select sinv.name,sinv.customer_name,sinv.posting_date,sitem.item_code,sitem.qty,sitem.rate 
+                from `tabSales Invoice Item` sitem, `tabSales Invoice` sinv where sitem.parent = sinv.name and sitem.item_code = %s 
+                and sinv.docstatus = 1 order by sinv.creation desc limit 5;""",(item_code),as_list = True)
+
+	if last_SINV:
+		return last_SINV
+	else:
+		False

@@ -5,7 +5,8 @@ frappe.ui.form.on("Purchase Order Item",{
             	frappe.call({
     		        "method": "last_records.last_records.doctype.last_purchase_table.last_purchase_table.getPurchaseLastprice",
     		        args: {
-    			            item_code: d.item_code,
+    				item_code: d.item_code,
+				company: frm.doc.company
     		        },
         		    callback:function(r){
 	                    cur_frm.clear_table("last_purchase_details");

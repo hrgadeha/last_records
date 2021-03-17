@@ -100,6 +100,18 @@ fixtures = [
 		]
 	   ]
 	]
+	},
+	{
+        "doctype": "Role",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                        "Stock Popup"
+                ]
+           ]
+        ]
     }
 ]
 
